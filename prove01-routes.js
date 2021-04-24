@@ -47,6 +47,7 @@ function requestHandler(req, res) {
         req.on('end', () => {
             const parsedBody = Buffer.concat(body).toString();
             let newUser = parsedBody.split('=')[1];
+            console.log(newUser);
 
             //write new user's name to local file
             fs.appendFile('./prove01-users.txt', `,${newUser}`, () => {
