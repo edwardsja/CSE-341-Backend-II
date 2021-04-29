@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> <%= title %> </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
+</head>
+
+<body>
+    <div class="jumbotron text-center pb-2">
+        <div class="container">
+            <h1 ><%= title %></h1>
+        </div>
+    </div>
+
+    <h2 class="mx-auto mb-3 w-50 text-center">Insert New Book</h2>
+
+    <form class="mx-auto w-50 h-50" action="/addBook" method="POST">
+        <h4>Add Required Information</h4>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" placeholder="Enter book title" name="title" required>
+        </div>
+
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Summary</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter book summary" name="summary" required></textarea>
+        </div>
+
+        <h4 class="mt-4">Add Optional Information</h4>
+        <div class="form-group">
+            <label for="author">Author</label>
+            <input type="text" class="form-control" id="title" placeholder="Enter author's name" name="author">
+        </div>
+
+        <div class="form-group">
+            <label for="publish" class="col-form-label">Publication Date</label>
+            <input class="form-control" type="date" id="publish" name="publish">
+        </div>
+
+        <div class="form-group">
+            <label for="isbn">ISBN</label>
+            <input type="text" class="form-control" id="isbn" placeholder="Enter ISBN" name="isbn" pattern="([0-9]){13}">
+            <small>ISBN must be 13 numbers long</small>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    </form>
+
+</body>
+
+</html>

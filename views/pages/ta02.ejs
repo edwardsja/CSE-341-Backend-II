@@ -9,11 +9,35 @@
 <div class="jumbotron text-center">
   <div class="container">
     <h1><%= title %></h1>
-    <p>This is the placeholder for Team Activity 02</p>
   </div>
 </div>
 <div class="container">
-  
+  <form action="/ta02/addUser" method="POST">
+    <input type="text" name="newUser">
+    <button type="submit">Add User</button>
+  </form> 
+</div>
+<div class="container">
+  <form action="/ta02/removeUser" method="POST">
+    <input type="text" name="removeUser">
+    <button type="submit">Remove User</button>
+  </form> 
+</div>
+<div class="container">
+  <!-- if a message is set, display that message -->
+  <% if (error !== 'undefined') { %> 
+    <p class="alert alert-danger" role="alert"> <%= error %> </p>
+  <% } %> 
+</div>
+<div class="container">
+  <% if (userName.length > 0) { %>
+    <h1>Users:</h1>
+    <ul>
+    <% for(name of userName) { %>
+        <li> <%= name %>  </li>
+    <% } %>
+    </ul>
+  <% } %>
 </div>
 
 
