@@ -11,22 +11,22 @@ router.post('/addBook', (req, res, next) => {
     const newBook = req.body;
 
     books.push(newBook);
-    return res.redirect('/list');
+    return res.redirect('/prove02/list');
 });
 
 router.use('/list', (req, res, next) => {
-    res.render('prove02-display.ejs', {
+    res.render('./pages/prove02-display.ejs', {
         title: 'Book List',
-        path: '/list',
+        path: '/prove02/list',
         bookList: books
     });
 });
 
 // default
 router.get('/',(req, res, next) => {
-    res.render('prove02.ejs', { 
+    res.render('./pages/prove02.ejs', { 
         title: 'Prove 02', 
-        path: '/', // For pug, EJS
+        path: '/prove02', // For pug, EJS
     });
 });
 

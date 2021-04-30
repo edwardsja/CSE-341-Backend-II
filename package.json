@@ -13,6 +13,7 @@
     "prove02": "nodemon prove02-index.js"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "body-parser": "^1.19.0",
     "ejs": "^2.7.4",
     "express": "^4.17.1",
