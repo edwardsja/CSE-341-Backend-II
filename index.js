@@ -27,6 +27,7 @@ const ta03Routes = require('./routes/ta03');
 const ta04Routes = require('./routes/ta04'); 
 //const prove01Routes = require('./routes/prove01');
 const prove02Routes = require('./routes/prove02');
+const prove03Routes = require('./routes/prove03');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -46,6 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')))
    .use('/ta04', ta04Routes)
    //.use('/prove01', prove01Routes)
    .use('/prove02', prove02Routes)
+   .use('/prove03', prove03Routes)
    .use('/project01/admin', adminRoutes)
    .use('/project01', shopRoutes)
    .get('/', (req, res, next) => {
