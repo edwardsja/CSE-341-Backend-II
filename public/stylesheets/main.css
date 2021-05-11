@@ -78,7 +78,7 @@ nav a:hover {
   color: #fff;
 }
 
-nav a {
+ul.nav > li > a {
   min-height: 50px;
   color: #9d9d9d;
 }
@@ -104,7 +104,9 @@ nav a {
 .dropdown-item a {
   text-decoration: none;
   display: inline-block;
-  height: 20px;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
   width: 100%;
   padding-left: 20px;
   padding-bottom: 5px;
@@ -116,5 +118,15 @@ nav a {
 
 .dropdown-item.active a {
   color: #fff !important;
+}
+
+.dropend ul {
+  position: relative !important;
+  top: -38px;
+  left: 160px !important;
+}
+
+.dropend:hover ul {
+  display: block;
 }
 /*# sourceMappingURL=main.css.map */

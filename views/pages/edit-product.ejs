@@ -1,0 +1,51 @@
+<html>
+<head>
+    <%- include('../includes/header.ejs') %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/project01.css">
+</head>
+
+<body>
+   <%- include('../includes/nav.ejs') %>
+
+   <main>
+       <header>
+           <div class="jumbotron text-center"><h1><%= title %></h1></div>
+       </header>
+    <form class="product-form form-group container" action="/project01/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST">
+        <div class="">
+            <label for="title">Title</label>
+            <input type="text" name="title" id="title" class="form-control" value="<% if (editing) { %> <%= product.title %> <% } %>">
+        </div>
+        <div class="">
+            <label for="author">Author</label>
+            <input type="text" name="author" id="author" class="form-control" value="<% if (editing) { %> <%= product.author %> <% } %>">
+        </div>
+        <div class="">
+            <label for="isbn">ISBN</label>
+            <input type="number" name="isbn" id="isbn" class="form-control" value="<% if (editing) { %><%= product.isbn %><% } %>">
+            <small id="isbnHelp" class="form-text text-muted">
+                IBSN must be 13 digits long
+              </small>
+        </div>
+        <div class="">
+            <label for="price">Price</label>
+            <input type="number" name="price" id="price" step="0.01" class="form-control" value="<% if (editing) { %><%= product.price %><% } %>">
+        </div>
+        <div class="">
+            <label for="imageUrl">Image URL</label>
+            <input type="text" name="imageUrl" id="imageUrl" class="form-control" value="<% if (editing) { %><%= product.imageUrl %><% } %>">
+        </div>
+        <div class="">
+            <label for="description">Description</label>
+            <textarea name="description" id="description" rows="5" class="form-control"><% if (editing) { %> <%= product.description %> <% } %></textarea>
+        </div>
+
+        <button class="btn btn-secondary" type="submit"><% if (editing) { %>
+         Update Product
+        <% } else { %>
+            Add Product
+        <% } %> </button>
+    </form>
+</main>
+</body>
+</html>

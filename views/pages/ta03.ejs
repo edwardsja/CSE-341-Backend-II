@@ -1,21 +1,62 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <% include ../includes/header.ejs %>
+    <% include ../includes/header.ejs %>
 </head>
 
 <body>
-  <% include ../includes/nav.ejs %>
-<div class="jumbotron text-center">
-  <div class="container">
-    <h1><%= title %></h1>
-    <p>This is the placeholder for Team Activity 03</p>
-  </div>
-</div>
-<div class="container">
-  
-</div>
+    <% include ../includes/nav.ejs %>
+    <div class="jumbotron text-center">
+        <div class="container">
+            <h1><%= title %></h1>
+        </div>
+    </div>
+
+
+    <% if (productList.length > 0) { %>
+    <form class="mx-auto w-25 h-50 mb-3" action="/ta03/tagSelect" method="POST" style="display: flex; flex-flow: row nowrap; justify-content: space-evenly;;">
+        <label for="filter" style="display: inline-block;">Filter By Tag</label>
+        <select id="filter" name="filter" class="form-control form-control-sm w-50" style="display: inline-block;">
+            <option selected disabled>Select Tag</option>
+            <% for (tag of tagList) { %>
+            <option value="<%= tag %>"><%= tag %></option>
+            <% } %>
+        </select>
+        <button type="submit" class="btn btn-primary" style="display: inline-block;">Submit</button>
+    </form>
+
+    <div class="container" style="display: flex; flex-flow: row wrap;">
+    <% for (product of productList) { %>
+        <div class="card mx-auto mb-5 w-25" style="width: 18rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="height:200px"><img class="card-img-top" src="<%= product.imageUrl %>" alt="Image of <%= product.name %> " style="max-height: 200px; margin-bottom: auto;"></div>
+        <div class="card-body" style="margin-top: auto;">
+            <h4 class="card-title"><%= product.name %> </h4>
+            <h6 class="card-text"><%= product.price %> </h6>
+            <p class="card-text"><%= product.description %></p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                Tags: <% for (let i = 0; i < product.tags.length; i++) {  %>
+                        <% if (i !== product.tags.length - 1) { %>
+                            <%= product.tags[i] + ', ' %>
+                        <% } else { %>
+                            <%= product.tags[i] %>
+                        <% } %>
+                      <% } %>
+            </li>
+        </ul>
+        </div>
+    <% } %>
+    </div>
+    <% } else { %>
+    <div class="container">
+    <h3>No products found.</h3>
+    </div>
+    <% } %>
+    
 
 
 </body>
+
 </html>

@@ -16,6 +16,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const PORT = process.env.PORT || 5000 // So we can run on heroku || (OR) localhost:5000
 
+const errorController = require('./controllers/error');
+
 const app = express();
 
 // Route setup. You can implement more in the future!
@@ -25,6 +27,9 @@ const ta03Routes = require('./routes/ta03');
 const ta04Routes = require('./routes/ta04'); 
 //const prove01Routes = require('./routes/prove01');
 const prove02Routes = require('./routes/prove02');
+
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
 app.use(express.static(path.join(__dirname, 'public')))
    .set('views', path.join(__dirname, 'views'))
@@ -41,6 +46,8 @@ app.use(express.static(path.join(__dirname, 'public')))
    .use('/ta04', ta04Routes)
    //.use('/prove01', prove01Routes)
    .use('/prove02', prove02Routes)
+   .use('/project01/admin', adminRoutes)
+   .use('/project01', shopRoutes)
    .get('/', (req, res, next) => {
      // This is the primary index, always handled last. 
      res.render('pages/index', {title: 'Welcome to my CSE341 repo', path: '/'});
@@ -49,4 +56,5 @@ app.use(express.static(path.join(__dirname, 'public')))
      // 404 page
      res.render('pages/404', {title: '404 - Page Not Found', path: req.url})
    })
+   .use(errorController.get404)
    .listen(PORT, () => console.log(`Listening on ${ PORT }`));
