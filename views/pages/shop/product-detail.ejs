@@ -12,12 +12,12 @@
                 <div class="jumbotron text-center"><h1>Product Details</h1></div>
             </header>
             <div class="container w-75">
-                <h1 class="text-center"><%= product.title %> </h1>
+                <h1 class="text-center"><%= title %> </h1>
                     <hr>
             </div>
             <div class="container d-flex flex-row flex-wrap justify-content-between">
                 <div style="width: max-content; flex: 35%;">
-                    <img src="<%= product.imageUrl %>" alt="<%= product.title %>" style="max-height: 400px;">
+                    <img src="<%= product.imageUrl %>" alt="<%= title %>" style="max-height: 400px;">
                 </div>
                 <div style="flex: 65%;">
                     <h6 class="mb-2">by <%= product.author %></h6>
@@ -25,7 +25,7 @@
                     <h2 class="mb-2">$<%= product.price %> </h2>
                     <form action="/project01/cart" method="POST" class="mb-4">
                         <button class='btn btn-secondary'>Add to Cart</button>
-                        <input type="hidden" name="productId" value="<%= product.id %>">
+                        <input type="hidden" name="productId" value="<%= product._id %>">
                     </form>
                     <p><%= product.description %> </p>
                 </div>

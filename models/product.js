@@ -1,51 +1,90 @@
-const fs = require('fs');
-const path = require('path');
+// const fs = require('fs');
+// const path = require('path');
 
-const p = path.join(__dirname, '../',
-  'data',
-  'products.json'
-);
+// const Cart = require('./cart');
 
-const getProductsFromFile = cb => {
-  fs.readFile(p, (err, fileContent) => {
-    if (err) {
-      cb([]);
-    } else {
-      cb(JSON.parse(fileContent));
-    }
-  });
-};
+// const p = path.join(__dirname, '../',
+// 'data',
+//   'products.json'
+// );
 
-module.exports = class Product {
-  constructor(inputTitle, inputUrl, inputDesc, inputPrice, inputAuthor, inputISBN) {
+// const getProductsFromFile = cb => {
+//   fs.readFile(p, (err, fileContent) => {
+//     if (err) {
+//       cb([]);
+//     } else {
+//       cb(JSON.parse(fileContent));
+//     }
+//   });
+// };
+
+const mongodb = require('mongodb');
+const getDb = require('../util/database').getDb;
+
+class Product {
+  constructor(inputTitle, inputUrl, inputDesc, inputPrice, inputAuthor, inputISBN, id, userId) {
     this.title = inputTitle;
     this.imageUrl = inputUrl;
     this.description = inputDesc;
     this.price = inputPrice;
     this.author = inputAuthor;
     this.isbn = inputISBN;
+    this._id = id ? new mongodb.ObjectId(id) : null;
+    this.userId = userId;
   }
 
   save() {
-    this.id = (Math.random()*100000000000000000).toString();
-    getProductsFromFile(products => {
-      products.push(this);
-      fs.writeFile(p, JSON.stringify(products), err => {
-        console.log(err);
-      });
+    const db = getDb();
+    let dbOp;
+    if (this._id) {
+      dbOp = db.collection('products').updateOne({_id: this._id}, {$set: this });
+    } else {
+      dbOp = db.collection('products').insertOne(this);
+    }
+    
+    return dbOp
+    .then(result => {
+      console.log(result);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
+  static deleteById(prodId) {
+    const db = getDb();
+    return db.collection('products').deleteOne({_id: new mongodb.ObjectId(prodId)})
+    .then()
+    .catch(err => {
+      console.log(err);
     });
   }
 
   static fetchAll(cb) {
-    getProductsFromFile(cb);
+    const db = getDb();
+    return db.collection('products')
+      .find()
+      .toArray()
+      .then(products => {
+        return products;
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
-  static findById(id, cb) {
-    getProductsFromFile(products => {
-      const product = products.find(p => {
-        return p.id === id;
-      });
-      cb(product);
+  static findById(prodId) {
+    const db = getDb();
+    return db.collection('products').find({_id: new mongodb.ObjectId(prodId)})
+    .next()
+    .then(product => {
+      console.log(product);
+      return product;
+    })
+    .catch(err => {
+      console.log(err);
     });
   }
 };
+
+module.exports = Product;

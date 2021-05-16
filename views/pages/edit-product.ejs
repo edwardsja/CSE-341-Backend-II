@@ -39,6 +39,9 @@
             <label for="description">Description</label>
             <textarea name="description" id="description" rows="5" class="form-control"><% if (editing) { %> <%= product.description %> <% } %></textarea>
         </div>
+        <% if (editing)  { %>
+            <input type="hidden" value ="<%= product._id %>" name="productId">
+        <% } %>
 
         <button class="btn btn-secondary" type="submit"><% if (editing) { %>
          Update Product
