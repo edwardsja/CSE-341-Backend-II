@@ -1,0 +1,14 @@
+.user-message {
+  width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid black;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.user-message--error {
+  color: #B01302;
+  border-color: #B01302;
+}
+/*# sourceMappingURL=project01_user-messages.css.map */

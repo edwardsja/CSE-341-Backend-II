@@ -15,15 +15,21 @@ exports.postAddProduct = (req, res, next) => {
   const description = req.body.description;
   const author = req.body.author;
   const isbn = req.body.isbn;
-  const product = new Product(title, imageUrl, description, price, author, isbn, null, req.user._id);
+  const product = new Product({title: title, price: price, description: description, imageUrl: imageUrl, author: author, isbn: isbn, userId: req.user});
   product.save()
   .then(result => {
     res.redirect('/project01/admin/products');
-  });
+  })
+  .catch(err => {
+    console.log(err);
+  })
 };
 
 exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.edit;
+  if (!editMode) {
+    return res.redirect('/project01');
+  }
   const prodId = req.params.productId;
   Product.findById(prodId)
   .then(product => {
@@ -48,8 +54,15 @@ exports.postEditProduct = (req, res, next) => {
   const updatedAuthor = req.body.author;
   const updatedISBN = req.body.isbn;
 
-  const product = new Product(updatedTitle, updatedImageUrl, updatedDescription, updatedPrice, updatedAuthor, updatedISBN, prodId);
-  product.save()
+  Product.findById(prodId).then(product => {
+    product.title = updatedTitle;
+    product.price = updatedPrice;
+    product.description = updatedDescription;
+    product.imageUrl = updatedImageUrl;
+    product.author = updatedAuthor;
+    product.isbn = updatedISBN;
+    return product.save();
+  })
   .then(result => {
     res.redirect('/project01/admin/products');
   })
@@ -57,7 +70,8 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
+  Product.find()
+  // .populate('userId')
   .then(products => {
     res.render('../views/pages/products', {
       prods: products,
@@ -69,6 +83,8 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.deleteById(prodId);
-  res.redirect('/project01/admin/products');
+  Product.findByIdAndRemove(prodId)
+  .then(() => {
+    res.redirect('/project01/admin/products');
+  });
 };

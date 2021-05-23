@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,aAAa,CAAC;EACV,KAAK,EAAE,GAAG;EACV,WAAW,EAAE,IAAI;EACjB,YAAY,EAAE,IAAI;EAClB,MAAM,EAAE,eAAe;EAC1B,OAAO,EAAE,IAAI;EACb,aAAa,EAAE,IAAI;CACnB;;AAED,AAAA,oBAAoB,CAAC;EACjB,KAAK,EAAE,OAAO;EACd,YAAY,EAAE,OAAO;CACxB",
+    "sources": [
+        "project01_user-messages.scss"
+    ],
+    "names": [],
+    "file": "project01_user-messages.css"
+}

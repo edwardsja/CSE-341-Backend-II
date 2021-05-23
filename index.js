@@ -11,34 +11,29 @@
  * IMPORTANT: Make sure to run "npm install" in your root before "npm start"
  *******************************************************************************/
 // Our initial setup (package requires, port number setup)
-const express = require('express');
-const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 const PORT = process.env.PORT || 5000 // So we can run on heroku || (OR) localhost:5000
 
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
+const flash = require('connect-flash');
+
 const errorController = require('./controllers/error');
-const mongoConnect = require('./util/database').mongoConnect;
-//const mongoose = require('mongoose');
 const User = require('./models/user');
 
-// const corsOptions = {
-//     origin: "https://<your_app_name>.herokuapp.com/",
-//     optionsSuccessStatus: 200
-// };
-// app.use(cors(corsOptions));
-
-// const options = {
-//     useUnifiedTopology: true,
-//     useNewUrlParser: true,
-//     useCreateIndex: true,
-//     useFindAndModify: false,
-//     family: 4
-// };
-
-// const MONGODB_URL = process.env.MONGODB_URL || "mongodb+srv://<username>:<username>@cse341cluster-3dwlw.mongodb.net/test?retryWrites=true&w=majority";
+const MONGODB_URL = process.env.MONGODB_URL || "mongodb+srv://nodejs:S7uM1aEGtWTSz9R1@cluster0.cpjqs.mongodb.net/project01?retryWrites=true&w=majority";
 
 const app = express();
+const store = new MongoDBStore({
+  uri: MONGODB_URL,
+  collection: 'sessions'
+});
+const csrfProtection = csrf();
 
 // Route setup. You can implement more in the future!
 const ta01Routes = require('./routes/ta01');
@@ -51,6 +46,7 @@ const prove03Routes = require('./routes/prove03');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const authRoutes = require('./routes/auth');
 
 app.use(express.static(path.join(__dirname, 'public')))
    .set('views', path.join(__dirname, 'views'))
@@ -60,15 +56,34 @@ app.use(express.static(path.join(__dirname, 'public')))
    // For view engine as hbs (Handlebars)
    //.engine('hbs', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layout', extname: 'hbs'})) // For handlebars
    //.set('view engine', 'hbs')
-   .use(bodyParser({extended: false})) // For parsing the body of a POST
+   .use(bodyParser({extended: false})) // For parsing the body of a POS
+   .use(
+      session({
+        secret: 'my secret',
+        resave: false,
+        saveUninitialized: false,
+        store: store
+      })
+    )
+    .use(csrfProtection)
+    .use(flash())
+
    .use((req, res, next) => {
-        User.findById('60a024c03463d5ce5d2506e1')
+      if (!req.session.user) {
+        return next();
+      }
+        User.findById(req.session.user._id)
         .then(user => {
-            req.user = new User(user.name, user.email, user.cart, user._id);
+            req.user = user;
             next();
         })
         .catch(err => console.log(err));
    })
+   .use((req, res, next) => {
+      res.locals.isAuthenticated = req.session.isLoggedIn;
+      res.locals.csrfToken = req.csrfToken();
+      next();
+    })
    .use('/ta01', ta01Routes)
    .use('/ta02', ta02Routes) 
    .use('/ta03', ta03Routes) 
@@ -78,6 +93,7 @@ app.use(express.static(path.join(__dirname, 'public')))
    .use('/prove03', prove03Routes)
    .use('/project01/admin', adminRoutes)
    .use('/project01', shopRoutes)
+   .use('/project01/auth', authRoutes)
    .get('/', (req, res, next) => {
      // This is the primary index, always handled last. 
      res.render('pages/index', {title: 'Welcome to my CSE341 repo', path: '/'});
@@ -88,18 +104,30 @@ app.use(express.static(path.join(__dirname, 'public')))
    })
    .use(errorController.get404);
 
-   mongoConnect(() => {
-    app.listen(PORT);
-   });
+const corsOptions = {
+  origin: "https://cse341nodejs.herokuapp.com",
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 
-  //  mongoose
-  //  .connect(
-  //    MONGODB_URL, options
-  //  )
-  //  .then(result => {
-  //    //... // This should be your user handling code implement following the course videos
-  //    app.listen(PORT);
-  //  })
-  //  .catch(err => {
-  //    console.log(err);
-  //  });
+const options = {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    family: 4
+};
+
+
+
+mongoose
+.connect(
+  MONGODB_URL, options
+)
+.then(result => {
+  console.log('Connected!');
+  app.listen(PORT);
+})
+.catch(err => {
+  console.log(err);
+});

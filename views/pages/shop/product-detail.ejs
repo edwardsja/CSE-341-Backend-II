@@ -23,10 +23,13 @@
                     <h6 class="mb-2">by <%= product.author %></h6>
                     <h6 class="mb-3">ISBN: <%= product.isbn %></h6>
                     <h2 class="mb-2">$<%= product.price %> </h2>
+                    <% if (isAuthenticated) { %>
                     <form action="/project01/cart" method="POST" class="mb-4">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button class='btn btn-secondary'>Add to Cart</button>
                         <input type="hidden" name="productId" value="<%= product._id %>">
                     </form>
+                    <% } %>
                     <p><%= product.description %> </p>
                 </div>
                 
